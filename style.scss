@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(173, 193, 230);
+    height: 100vh;
+}
+
+.app {
+    &__container {
+    width: 25rem;
+    height: 25rem;
+    background-color: white;
+    border-radius: 1rem;
+    }
+
+    &__controls {
+        display: flex;
+        justify-content: space-between;
+        padding: .5rem;
+        width: 25rem;
+
+        &--button {
+            display: block;
+        }
+    }
+}
