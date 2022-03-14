@@ -7,12 +7,13 @@
     height: 100vh;
 }
 
-.app {
+.tasks {
     &__container {
     width: 25rem;
     height: 25rem;
     background-color: white;
     border-radius: 1rem;
+    padding: 1rem;
     }
 
     &__controls {
@@ -25,4 +26,24 @@
             display: block;
         }
     }
+}
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid gray;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+
+        &__left {
+            display: flex;
+            align-items: center;
+        }
+
+        &__button {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
 }

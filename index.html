@@ -10,20 +10,13 @@
 </head>
 <body>
     <div class="container">
-        <div class="app__controls">
-            <button class="app__controls--button">Add task</button>
-            <button class="app__controls--button">Delete all</button>
+        <div class="tasks__controls">
+            <button class="tasks__controls--button" id="add_task">Add task</button>
+            <button class="tasks__controls--button" id="clear_tasks">Delete all</button>
         </div>
-        <div class="app__container">
-            <div class="task">
-                <div class="task__left">
-                    <input type="checkbox" class="task__checkbox">
-                    <p class="task__text">Lorem ipsum dolor sit <i class="fa-solid fa-pencil"></i>amet consectetur?</p>
-                </div>
-                <div class="task__right">
-                    <button></button>
-                </div>
-            </div>
+        <div class="tasks__container">
+            <div class="empty__message"></div>
+            <div class="tasks__list"></div>
         </div>
     </div>
     <script src="./script.js"></script>
