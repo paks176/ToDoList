@@ -8,16 +8,17 @@ const taskList = {
         taskPull.innerHTML = '';
         this.render()
     },
-    deleteTask(taskNumber) {
-        this.pull.splice(taskNumber, 1);
+    deleteTask(arrayNumber) {
+        this.pull.splice(arrayNumber, 1);
+        let deletedItem = taskPull.querySelector(`div[task_id="${newTask}"]`);
+        deletedItem.remove();
         this.render();
     },
     createTask() {
         let newTask = new Task();
         this.pull.push(newTask);
-        this.render();
         taskPull.insertAdjacentHTML('beforeend', `
-        <div class="task">
+        <div class="task" task_id="${newTask.number}">
                 <div class="task__left">
                     <div class="task__number">${newTask.number}</div>
                     <input type="checkbox" class="task__checkbox">
@@ -31,9 +32,9 @@ const taskList = {
                         <img src="./icons/trash-icon-256.png" alt="Delete" class="task__button">
                     </button>
                 </div>
-            </div>
-        `)
-        
+            </div>`)
+        taskPull.querySelector(`div[task_id="${newTask.number}"`).addEventListener('click', () => taskList.deleteTask(this.pull[newTask.number - 1]));
+        this.render();
     },  
     render() {
         if (this.pull.length === 0) {
@@ -63,9 +64,6 @@ class Task {
                 break;
         }
     }
-    addListener() {
-        document.querySelector('#delete').addEventListener('click', () => taskList.deleteTask(newTask.number))}
-
 }
 
 const addTask = document.querySelector('#add_task').addEventListener('click', () => taskList.createTask())
