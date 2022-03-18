@@ -1,23 +1,22 @@
-const emptyMessage = document.querySelector('.empty__message')
-const taskPull = document.querySelector('.tasks__list')
+const emptyMessageDIV = document.querySelector('.empty__message')
+const taskDIV = document.querySelector('.tasks__list')
 
 const taskList = {
     pull: [],
     clear() {
         this.pull = [];
-        taskPull.innerHTML = '';
+        taskDIV.innerHTML = '';
         this.render()
     },
-    deleteTask(arrayNumber) {
-        this.pull.splice(arrayNumber, 1);
-        let deletedItem = taskPull.querySelector(`div[task_id="${newTask}"]`);
-        deletedItem.remove();
+    deleteTask(newTask) {
+        this.pull.splice((newTask.number - 1), 1);
+        taskDIV.querySelector(`div[task_id="${newTask.number}"]`).remove();
         this.render();
     },
     createTask() {
         let newTask = new Task();
         this.pull.push(newTask);
-        taskPull.insertAdjacentHTML('beforeend', `
+        taskDIV.insertAdjacentHTML('beforeend', `
         <div class="task" task_id="${newTask.number}">
                 <div class="task__left">
                     <div class="task__number">${newTask.number}</div>
@@ -28,20 +27,20 @@ const taskList = {
                     <button id="edit">
                         <img src="./icons/pencil-256x256.png" alt="Edit" class="task__button">
                     </button>
-                    <button id="delete">
+                    <button delete-task="${newTask.number}">
                         <img src="./icons/trash-icon-256.png" alt="Delete" class="task__button">
                     </button>
                 </div>
             </div>`)
-        taskPull.querySelector(`div[task_id="${newTask.number}"`).addEventListener('click', () => taskList.deleteTask(this.pull[newTask.number - 1]));
+        taskDIV.querySelector(`button[delete-task="${newTask.number}"`).addEventListener('click', () => taskList.deleteTask(newTask));
         this.render();
     },  
     render() {
         if (this.pull.length === 0) {
-            emptyMessage.innerHTML = '<p>Its empty here</p>';
+            emptyMessageDIV.innerHTML = '<p>Its empty here</p>';
         }
         else {
-            emptyMessage.innerHTML = '';
+            emptyMessageDIV.innerHTML = '';
         }
     }
 };
