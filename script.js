@@ -6,36 +6,64 @@ const taskList = {
     clear() {
         this.pull = [];
         taskDIV.innerHTML = '';
-        this.render()
+        this.checkEmptiness();
     },
-    deleteTask(newTask) {
-        this.pull.splice((newTask.number - 1), 1);
-        taskDIV.querySelector(`div[task_id="${newTask.number}"]`).remove();
-        this.render();
+    deleteTask(newTaskObject) {
+        this.pull.splice((newTaskObject.number - 1), 1);
+        taskDIV.querySelector(`#task-${newTaskObject.number}`).remove();
+        this.checkEmptiness();
+    },
+    enterText(newTaskDIV, newTaskObject) {
+        let inputText = newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`);
+        let enteredText = inputText.value;
+        inputText.remove();
+        newTaskDIV.querySelector('.task__left').insertAdjacentHTML('beforeend', `
+        <p class="task__text" id="task-${newTaskObject.number}">${enteredText}</p>`)
+        newTaskObject.text = enteredText;
+    },
+    modifyText(newTaskObject, newTaskDIV) {
+        let editedElem = taskDIV.querySelector(`p[id="task-${newTaskObject.number}"]`);
+        let editedText = editedElem.innerText;
+        editedElem.remove();
+        let taskLeft = newTaskDIV.querySelector('.task__left');
+        taskLeft.insertAdjacentHTML('beforeend', `<input type="text" class="task_text--edit" enter-text="${newTaskObject.number}">`)
+        taskLeft.addEventListener('keydown', function(event) {
+            if (event.code == 'Enter') {
+                taskList.enterText(newTaskDIV, newTaskObject)
+            }
+        });
     },
     createTask() {
-        let newTask = new Task();
-        this.pull.push(newTask);
+        let newTaskObject = new Task();
+        this.pull.push(newTaskObject);
         taskDIV.insertAdjacentHTML('beforeend', `
-        <div class="task" task_id="${newTask.number}">
-                <div class="task__left">
-                    <div class="task__number">${newTask.number}</div>
-                    <input type="checkbox" class="task__checkbox">
-                    <p class="task__text">Lorem ipsum dolor sit <i class="fa-solid fa-pencil"></i>amet consectetur?</p>
-                </div>
-                <div class="task__right">
-                    <button id="edit">
-                        <img src="./icons/pencil-256x256.png" alt="Edit" class="task__button">
-                    </button>
-                    <button delete-task="${newTask.number}">
-                        <img src="./icons/trash-icon-256.png" alt="Delete" class="task__button">
-                    </button>
-                </div>
-            </div>`)
-        taskDIV.querySelector(`button[delete-task="${newTask.number}"`).addEventListener('click', () => taskList.deleteTask(newTask));
-        this.render();
+        <div class="task" id="task-${newTaskObject.number}">
+                    <div class="task__left">
+                        <div class="task__number">${newTaskObject.number}</div>
+                        <input type="checkbox" class="task__checkbox">
+                        <input type="text" class="task_text--edit" enter-text="${newTaskObject.number}">
+                    </div>
+                    <div class="task__right">
+                        <button id="edit">
+                            <img src="./icons/pencil-256x256.png" alt="Edit" class="task__button">
+                        </button>
+                        <button delete-task="${newTaskObject.number}">
+                            <img src="./icons/trash-icon-256.png" alt="Delete" class="task__button">
+                        </button>
+                    </div>
+                </div>`)
+        const newTaskDIV = document.querySelector(`#task-${newTaskObject.number}`) // общий селектор данного конкретного Таска...
+        // ... на который я ставлю слушатель события для удаления и редактирования
+        newTaskDIV.querySelector(`button[delete-task="${newTaskObject.number}"]`).addEventListener('click', () => taskList.deleteTask(newTaskObject));
+        newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`).addEventListener('keydown', function(event) {
+            if (event.code == 'Enter') {
+                taskList.enterText(newTaskDIV, newTaskObject)
+            }
+        });
+        newTaskDIV.querySelector('#edit').addEventListener('click', () => taskList.modifyText(newTaskObject, newTaskDIV));
+        this.checkEmptiness();
     },  
-    render() {
+    checkEmptiness() {
         if (this.pull.length === 0) {
             emptyMessageDIV.innerHTML = '<p>Its empty here</p>';
         }
@@ -45,7 +73,7 @@ const taskList = {
     }
 };
 
-taskList.render();
+taskList.checkEmptiness();
 
 class Task {
     marked = false // открытое поле класса
