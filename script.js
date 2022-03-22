@@ -26,12 +26,15 @@ const taskList = {
         let editedText = editedElem.innerText;
         editedElem.remove();
         let taskLeft = newTaskDIV.querySelector('.task__left');
-        taskLeft.insertAdjacentHTML('beforeend', `<input type="text" class="task_text--edit" enter-text="${newTaskObject.number}">`)
-        taskLeft.addEventListener('keydown', function(event) {
+        taskLeft.insertAdjacentHTML('beforeend', `<input type="text" class="task_text--edit" value="${editedText}" enter-text="${newTaskObject.number}">`)
+        let modifyTextInput = newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`)
+        modifyTextInput.addEventListener('keydown', function(event) {
             if (event.code == 'Enter') {
                 taskList.enterText(newTaskDIV, newTaskObject)
             }
         });
+        modifyTextInput.focus();
+        modifyTextInput.onfocus = modifyTextInput.setSelectionRange(modifyTextInput.value.length,modifyTextInput.value.length);
     },
     createTask() {
         let newTaskObject = new Task();
@@ -44,7 +47,7 @@ const taskList = {
                         <input type="text" class="task_text--edit" enter-text="${newTaskObject.number}">
                     </div>
                     <div class="task__right">
-                        <button id="edit">
+                        <button edit-task="${newTaskObject.number}">
                             <img src="./icons/pencil-256x256.png" alt="Edit" class="task__button">
                         </button>
                         <button delete-task="${newTaskObject.number}">
@@ -55,12 +58,13 @@ const taskList = {
         const newTaskDIV = document.querySelector(`#task-${newTaskObject.number}`) // общий селектор данного конкретного Таска...
         // ... на который я ставлю слушатель события для удаления и редактирования
         newTaskDIV.querySelector(`button[delete-task="${newTaskObject.number}"]`).addEventListener('click', () => taskList.deleteTask(newTaskObject));
+        newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`).focus();
         newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`).addEventListener('keydown', function(event) {
             if (event.code == 'Enter') {
                 taskList.enterText(newTaskDIV, newTaskObject)
             }
-        });
-        newTaskDIV.querySelector('#edit').addEventListener('click', () => taskList.modifyText(newTaskObject, newTaskDIV));
+        })
+        newTaskDIV.querySelector(`button[edit-task="${newTaskObject.number}"]`).addEventListener('click', () => taskList.modifyText(newTaskObject, newTaskDIV));
         this.checkEmptiness();
     },  
     checkEmptiness() {

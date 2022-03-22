@@ -1,3 +1,13 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-image: url(./back.jpg);
+  background-size: 30%;
+}
+
 .container {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -12,7 +22,6 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background-color: #adc1e6;
   height: 100vh;
 }
 
