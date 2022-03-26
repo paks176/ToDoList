@@ -1,6 +1,5 @@
 const emptyMessageDIV = document.querySelector('.empty__message')
 const taskDIV = document.querySelector('.tasks__list')
-
 const taskList = {
     pull: [],
     clear() {
@@ -12,6 +11,29 @@ const taskList = {
         this.pull.splice((newTaskObject.number - 1), 1);
         taskDIV.querySelector(`#task-${newTaskObject.number}`).remove();
         this.checkEmptiness();
+        this.moveUp(newTaskObject);
+    },
+    moveUp(newTaskObject) {
+        for (let i = 0; i < this.pull.length; i++) {   
+            let thisTask = taskDIV.querySelector(`#task-${this.pull[i].number}`);
+            if (thisTask === null) {
+                //  taskDIV.querySelector(`#task-${(this.pull[i].number+1)} .task__number`).innerText = String(this.pull.indexOf(this.pull[i], 0) + 1);
+                newTaskObject.number = Number(newTaskObject.number + 1);
+                
+                } else {
+                    this.pull[i].number = (this.pull.indexOf(this.pull[i], 0) + 1);
+                    // let thisTaskEnterText = thisTask.querySelector(`input[enter-text="${(newTaskObject.number - 1)}"]`);
+                    let thisTaskEditTask = thisTask.querySelector(`button[edit-task="${(newTaskObject.number - 1)}"]`);
+                    let thisTaskDeleteTask = thisTask.querySelector(`button[delete-task="${(newTaskObject.number - 1)}"]`);
+                    let thisTaskText = thisTask.querySelector(`p[id="task-${(newTaskObject.number - 1)}"]`);
+                    let thisTaskNumber = thisTask.querySelector(`.task-number`);
+                    // thisTaskEnterText.setAttribute("enter-text", `${String(this.pull.indexOf(this.pull[i], 0) + 1)}`);
+                    thisTaskEditTask.setAttribute("edit-task", `${String(this.pull.indexOf(this.pull[i], 0) + 1)}`);
+                    thisTaskDeleteTask.setAttribute("delete-task", `${String(this.pull.indexOf(this.pull[i], 0) + 1)}`);
+                    thisTaskText.setAttribute("id", `${String(this.pull.indexOf(this.pull[i], 0) + 1)}`);
+                    thisTaskNumber.innerText = String(this.pull.indexOf(this.pull[i], 0) + 1);
+                }
+        }
     },
     enterText(newTaskDIV, newTaskObject) {
         let inputText = newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`);
@@ -76,9 +98,7 @@ const taskList = {
         }
     }
 };
-
 taskList.checkEmptiness();
-
 class Task {
     marked = false // открытое поле класса
     constructor(text) {
@@ -96,6 +116,5 @@ class Task {
         }
     }
 }
-
 const addTask = document.querySelector('#add_task').addEventListener('click', () => taskList.createTask())
 const clearTasks = document.querySelector('#clear_tasks').addEventListener('click', () => taskList.clear())

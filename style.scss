@@ -5,7 +5,7 @@
 
 body {
     background-image: url(./back.jpg);
-    background-size: 30%;
+    background-size: 15%;
 }
 
 .container {
@@ -33,6 +33,7 @@ body {
 
         &--button {
             display: block;
+            padding: 0.5rem;
         }
     }
 }
