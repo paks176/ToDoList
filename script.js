@@ -8,32 +8,33 @@ const taskList = {
         this.checkEmptiness();
     },
     deleteTask(newTaskObject) {
-        this.pull.splice((newTaskObject.number - 1), 1);
-        taskDIV.querySelector(`#task-${newTaskObject.number}`).remove();
+        let arrayNumber = newTaskObject.number - 1
+        this.pull.splice(arrayNumber, 1);
         this.checkEmptiness();
-        this.moveUp(newTaskObject);
+        this.moveUp(newTaskObject, arrayNumber);
     },
-    moveUp(newTaskObject) {
-        for (let i = 0; i < this.pull.length; i++) {   
-            let thisTask = taskDIV.querySelector(`#task-${this.pull[i].number}`);
-            if (thisTask === null) {
-                //  taskDIV.querySelector(`#task-${(this.pull[i].number+1)} .task__number`).innerText = String(this.pull.indexOf(this.pull[i], 0) + 1);
-                newTaskObject.number = Number(newTaskObject.number + 1);
-                
-                } else {
-                    this.pull[i].number = (this.pull.indexOf(this.pull[i], 0) + 1);
-                    // let thisTaskEnterText = thisTask.querySelector(`input[enter-text="${(newTaskObject.number - 1)}"]`);
-                    let thisTaskEditTask = thisTask.querySelector(`button[edit-task="${(newTaskObject.number - 1)}"]`);
-                    let thisTaskDeleteTask = thisTask.querySelector(`button[delete-task="${(newTaskObject.number - 1)}"]`);
-                    let thisTaskText = thisTask.querySelector(`p[id="task-${(newTaskObject.number - 1)}"]`);
-                    let thisTaskNumber = thisTask.querySelector(`.task-number`);
-                    // thisTaskEnterText.setAttribute("enter-text", `${String(this.pull.indexOf(this.pull[i], 0) + 1)}`);
-                    thisTaskEditTask.setAttribute("edit-task", `${String(this.pull.indexOf(this.pull[i], 0) + 1)}`);
-                    thisTaskDeleteTask.setAttribute("delete-task", `${String(this.pull.indexOf(this.pull[i], 0) + 1)}`);
-                    thisTaskText.setAttribute("id", `${String(this.pull.indexOf(this.pull[i], 0) + 1)}`);
-                    thisTaskNumber.innerText = String(this.pull.indexOf(this.pull[i], 0) + 1);
+    moveUp(newTaskObject, arrayNumber) {
+        taskDIV.querySelector(`#task-${newTaskObject.number}`).remove();
+        for (let i = arrayNumber; i < this.pull.length; i++) {
+                let newNumber = this.pull.indexOf(this.pull[i]) + 2;
+                let movedTask = taskDIV.querySelector(`#task-${newNumber}`);
+                switch (movedTask === null) {
+                    case true:
+                        break
+                    case false:
+                        this.pull[i].number = newNumber - 1
+                        const newTaskDIV = document.querySelector(`#task-${newNumber}`)
+                        movedTask.querySelector(`button[edit-task="${newNumber}"]`).setAttribute("edit-task", `${newNumber - 1}`)
+                        movedTask.querySelector(`button[delete-task="${newNumber}"]`).setAttribute("delete-task", `${newNumber - 1}`)
+                        movedTask.id = `task-${newNumber - 1}`;
+                        movedTask.querySelector('p').setAttribute("id", `task-${newNumber - 1}`);
+                        movedTask.querySelector('.task__number').innerText = newNumber - 1;
+                        movedTask.addEventListener('click', () => taskList.modifyText(this.pull[i], movedTask));
+                        movedTask.addEventListener('click', () => taskList.deleteTask(this.pull[i]));
+                    break
                 }
-        }
+            }
+            
     },
     enterText(newTaskDIV, newTaskObject) {
         let inputText = newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`);

@@ -61,4 +61,17 @@ body {
             width: 15rem;
             height: 1.5rem;
         }
+
+        &__number {
+            margin-right: 1rem;
+            background-color: green;
+            padding: 0.5rem;
+            border-radius: 1rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        &__checkbox {
+            margin-right: 0.5rem;
+        }
 }
