@@ -29,8 +29,10 @@ const taskList = {
                         movedTask.id = `task-${newNumber - 1}`;
                         movedTask.querySelector('p').setAttribute("id", `task-${newNumber - 1}`);
                         movedTask.querySelector('.task__number').innerText = newNumber - 1;
-                        movedTask.addEventListener('click', () => taskList.modifyText(this.pull[i], movedTask));
-                        movedTask.addEventListener('click', () => taskList.deleteTask(this.pull[i]));
+                        // movedTask.removeEventListener('click', () => taskList.modifyText(this.pull[i]));
+                        // movedTask.removeEventListener('click', () => taskList.deleteTask(this.pull[i]));
+                        // movedTask.addEventListener('click', () => taskList.modifyText(this.pull[i], movedTask));
+                        // movedTask.addEventListener('click', () => taskList.deleteTask(this.pull[i]));
                     break
                 }
             }
@@ -78,8 +80,7 @@ const taskList = {
                         </button>
                     </div>
                 </div>`)
-        const newTaskDIV = document.querySelector(`#task-${newTaskObject.number}`) // общий селектор данного конкретного Таска...
-        // ... на который я ставлю слушатель события для удаления и редактирования
+        const newTaskDIV = document.querySelector(`#task-${newTaskObject.number}`)
         newTaskDIV.querySelector(`button[delete-task="${newTaskObject.number}"]`).addEventListener('click', () => taskList.deleteTask(newTaskObject));
         newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`).focus();
         newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`).addEventListener('keydown', function(event) {
