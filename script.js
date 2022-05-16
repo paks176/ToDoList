@@ -36,15 +36,21 @@ const taskList = {
                     break
                 }
             }
-            
     },
-    enterText(newTaskDIV, newTaskObject) {
-        let inputText = newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`);
-        let enteredText = inputText.value;
-        inputText.remove();
-        newTaskDIV.querySelector('.task__left').insertAdjacentHTML('beforeend', `
-        <p class="task__text" id="task-${newTaskObject.number}">${enteredText}</p>`)
-        newTaskObject.text = enteredText;
+    enterText(newTaskDIV, newTaskObject, thisTaskInputValue) {
+        console.dir(thisTaskInputValue)
+            if (thisTaskInputValue === '') {
+                newTaskDIV.querySelector('.task__left').insertAdjacentHTML('beforeend', `
+                <p class="task__text" id="task-${newTaskObject.number}">Default text!</p>`);
+                newTaskObject.text = thisTaskInputValue;
+                newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`).remove();
+            } else {
+                    // document.querySelector(`#task-${newTaskObject.number}`).removeEventListener('blur', () => this.enterText(newTaskDIV, newTaskObject))
+                    newTaskDIV.querySelector('.task__left').insertAdjacentHTML('beforeend', `
+                    <p class="task__text" id="task-${newTaskObject.number}">${thisTaskInputValue}</p>`);
+                    newTaskObject.text = thisTaskInputValue;
+                    newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`).remove();
+                };
     },
     modifyText(newTaskObject, newTaskDIV) {
         let editedElem = taskDIV.querySelector(`p[id="task-${newTaskObject.number}"]`);
@@ -80,12 +86,14 @@ const taskList = {
                         </button>
                     </div>
                 </div>`)
-        const newTaskDIV = document.querySelector(`#task-${newTaskObject.number}`)
+        const newTaskDIV = document.querySelector(`#task-${newTaskObject.number}`);
+        const thisTaskInput = newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`);
+        thisTaskInput.focus();
+        thisTaskInput.addEventListener('focusout', () => {taskList.enterText(newTaskDIV, newTaskObject, thisTaskInput.value)});
         newTaskDIV.querySelector(`button[delete-task="${newTaskObject.number}"]`).addEventListener('click', () => taskList.deleteTask(newTaskObject));
-        newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`).focus();
         newTaskDIV.querySelector(`input[enter-text="${newTaskObject.number}"]`).addEventListener('keydown', function(event) {
             if (event.code == 'Enter') {
-                taskList.enterText(newTaskDIV, newTaskObject)
+                taskList.enterText(newTaskDIV, newTaskObject, thisTaskInput.value)
             }
         })
         newTaskDIV.querySelector(`button[edit-task="${newTaskObject.number}"]`).addEventListener('click', () => taskList.modifyText(newTaskObject, newTaskDIV));
